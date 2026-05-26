@@ -190,47 +190,56 @@ if (contactForm) {
             }
 
             try {
-
-                const submitBtn =
-                    contactForm.querySelector(
-                        'button[type="submit"]'
-                    );
-
-                const originalText =
-                    submitBtn.textContent;
-
-                submitBtn.textContent =
-                    'Sending...';
-
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+            
+                submitBtn.textContent = 'Sending...';
                 submitBtn.disabled = true;
-                
-const response = await fetch(
-    'https://portfolio-snwr.onrender.com/api/contact',
-    {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name,
-            email,
-            subject,
-            message
-        })
-    }
-);
-
-const data = await response.json();
-
-if (response.ok) {
-    showNotification('Message sent successfully!', 'success');
-    contactForm.reset();
-} else {
-    showNotification(data.error || 'Failed to send message', 'error');
-}
-
-submitBtn.textContent = originalText;
-submitBtn.disabled = false;
+            
+                const response = await fetch(
+                    'https://portfolio-snwr.onrender.com/api/contact',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            subject,
+                            message
+                        })
+                    }
+                );
+            
+                let data = {};
+            
+                try {
+                    data = await response.json();
+                } catch {
+                    data = {};
+                }
+            
+                if (response.ok) {
+                    showNotification('Message sent successfully!', 'success');
+                    contactForm.reset();
+                } else {
+                    showNotification(data.error || 'Failed to send message', 'error');
+                }
+            
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            
+            } catch (error) {
+                console.error(error);
+            
+                showNotification('Server error occurred', 'error');
+            
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+            
+                submitBtn.textContent = 'Send Message';
+                submitBtn.disabled = false;
+            }
 
 // ============================================
 // NOTIFICATION SYSTEM
