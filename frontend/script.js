@@ -203,25 +203,26 @@ if (contactForm) {
                     'Sending...';
 
                 submitBtn.disabled = true;
-
+                
                 const response =
-                    fetch(https://portfolio-snwr.onrender.com/api/contact', {
-
-                        method: 'POST',
-
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-
-                        body: JSON.stringify({
-                            name,
-                            email,
-                            subject,
-                            message
-                        })
-                    });
-
+                    await fetch(
+                        'https://portfolio-snwr.onrender.com/api/contact',
+                        {
+                
+                            method: 'POST',
+                
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                
+                            body: JSON.stringify({
+                                name,
+                                email,
+                                subject,
+                                message
+                            })
+                        }
+                    );
                 const data =
                     await response.json();
 
